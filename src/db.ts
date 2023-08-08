@@ -113,7 +113,7 @@ export const getDbItemById = (id: number): DbItemWithId | "not found" => {
  */
 export const updateDbItemById = (
   id: number,
-  newData: Partial<DbItem>
+  newData: Partial<DbItem>,
 ): DbItemWithId | "not found" => {
   const idxOfEntry = findIndexOfDbItemById(id);
   // type guard against "not found"
