@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>My server API</title>
+    <h1>Welcome to Ho Kei's todo app, check out the /todoapp endpoint!</h1>
   </head>
   <body>
     <header>
@@ -11,19 +12,19 @@
     <main>
       <section>
         <h3>Retrieve all items</h3>
-        <p><code>GET /items</code></p>
+        <p><code>GET /todoapp</code></p>
       </section>
       <section>
         <h3>Create a item</h3>
-        <p><code>POST /items</code></p>
+        <p><code>POST /todoapp</code></p>
       </section>
       <section>
         <h3>Retrieve a specific item</h3>
-        <p><code>GET /items/{id}</code></p>
+        <p><code>GET /todoapp/{id}</code></p>
       </section>
       <section>
         <h3>Update a specific item</h3>
-        <p><code>PATCH /items/{id}</code></p>
+        <p><code>PATCH /todoapp/{id}</code></p>
         <p>Attaching a JSON body with the possible below fields:</p>
         <ul>
           <li><code>title</code> (string)</li>
@@ -32,7 +33,7 @@
       </section>
       <section>
         <h3>Delete a specific item</h3>
-        <p><code>DELETE /items/{id}</code></p>
+        <p><code>DELETE /todoapp/{id}</code></p>
       </section>
     </main>
   </body>
