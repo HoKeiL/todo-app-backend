@@ -1,5 +1,7 @@
 export interface DbItem {
-  // sketch out interface here
+  task: string;
+  dueDate: string;
+  status: "Done" | "InProgress";
 }
 
 export interface DbItemWithId extends DbItem {
@@ -17,13 +19,31 @@ let idCounter = 0;
  * @param n - the number of items to generate
  * @returns the created items
  */
+
+export const todoSamples: DbItem[] = [
+  {
+    task: "finish todoapp",
+    dueDate: "23-08-2023",
+    status: "InProgress",
+  },
+  {
+    task: "drink 2L water",
+    dueDate: "23-08-2023",
+    status: "InProgress",
+  },
+  {
+    task: "HIIT ",
+    dueDate: "25-08-2023",
+    status: "InProgress",
+  },
+];
 export const addDummyDbItems = (n: number): DbItemWithId[] => {
   const createdSignatures: DbItemWithId[] = [];
+  let todoSamplesIndex = 0;
   for (let count = 0; count < n; count++) {
-    const createdSignature = addDbItem({
-      // possibly add some generated data here
-    });
+    const createdSignature = addDbItem(todoSamples[todoSamplesIndex]);
     createdSignatures.push(createdSignature);
+    todoSamplesIndex++;
   }
   return createdSignatures;
 };
