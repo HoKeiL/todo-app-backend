@@ -10,6 +10,8 @@ import {
   updateDbItemById,
 } from "./db";
 import filePath from "./filePath";
+import { Client } from "pg";
+import { getEnvVarOrFail } from "./getEnvVarOrFail";
 
 addDummyDbItems(3);
 const app = express();
@@ -21,6 +23,9 @@ app.use(cors());
 
 // read in contents of any environment variables in the .env file
 dotenv.config();
+const dbUrl = getEnvVarOrFail("DATABASE_URL");
+const client = new Client(dbUrl);
+client.connect();
 
 // use the environment variable PORT, or 4000 as a fallback
 const PORT_NUMBER = process.env.PORT ?? 4000;
@@ -30,7 +35,12 @@ app.get("/", (req, res) => {
   const pathToFile = filePath("../public/index.html");
   res.sendFile(pathToFile);
 });
-
+//Get all todos from using SQL query
+app.get("/todoapp", async (req, res) => {
+  const text = "SELECT * FROM todoapp";
+  const result = await client.query(text);
+  res.status(200).json(result.rows);
+});
 // GET all todos
 app.get("/todoapp", (req, res) => {
   const allTodos = getAllDbItems();
