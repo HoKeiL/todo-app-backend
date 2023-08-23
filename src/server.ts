@@ -45,7 +45,6 @@ app.get("/todoapp", async (req, res) => {
   }
 });
 
-
 // GET all todos
 // app.get("/todoapp", (req, res) => {
 //   const allTodos = getAllDbItems();
@@ -56,12 +55,13 @@ app.get("/todoapp", async (req, res) => {
 app.post<{}, {}, DbItem>("/todoapp", async (req, res) => {
   try {
     const postData = req.body;
-    const text = "INSERT INTO todoapp(task, duedate, completed) VALUES($1, $2, $3)";
-    const value = [postData.task, postData.dueDate, postData.completed]
+    const text =
+      "INSERT INTO todoapp(task, duedate, completed) VALUES($1, $2, $3)";
+    const value = [postData.task, postData.dueDate, postData.completed];
     const result = await client.query(text, value);
     res.status(201).json(result.rows);
   } catch (error) {
-    console.log(`there is an error: ${error}`)
+    console.log(`there is an error: ${error}`);
   }
 });
 
@@ -74,24 +74,27 @@ app.post<{}, {}, DbItem>("/todoapp", async (req, res) => {
 
 // PATCH a todo using SQL query
 
-app.patch<{ id: string }, {}, Partial<DbItem>>("/todoapp/:id", async (req, res) => {
-  try {
-    const matchingId = parseInt(req.params.id);
-    const patchData = req.body;
-    const queryText = "UPDATE todoapp SET completed = $2 WHERE id = $1";
-    const values = [matchingId, patchData.completed];
-    const result = await client.query(queryText, values);
-    res.status(200).json({
-      message: "todo status has been updated",
-      updated: result.rows,
-    });
-  }
-  catch (error) {
-    console.log(`there is an error: ${error}`)
-    res.status(404).json("todo status cannot be updated, please try again later.");
-  }
-
-});
+app.patch<{ id: string }, {}, Partial<DbItem>>(
+  "/todoapp/:id",
+  async (req, res) => {
+    try {
+      const matchingId = parseInt(req.params.id);
+      const patchData = req.body;
+      const queryText = "UPDATE todoapp SET completed = $2 WHERE id = $1";
+      const values = [matchingId, patchData.completed];
+      const result = await client.query(queryText, values);
+      res.status(200).json({
+        message: "todo status has been updated",
+        updated: result.rows,
+      });
+    } catch (error) {
+      console.log(`there is an error: ${error}`);
+      res
+        .status(404)
+        .json("todo status cannot be updated, please try again later.");
+    }
+  },
+);
 
 //PATCH todo status
 // app.patch<{ id: string }, {}, Partial<DbItem>>("/todoapp/:id", (req, res) => {
@@ -113,16 +116,15 @@ app.delete<{ id: string }>("/todoapp/:id", async (req, res) => {
     const result = await client.query(queryText, values);
     res.status(200).json({
       message: `todo ${matchingId} has been deleted`,
-      row: result.rows
-    })
+      row: result.rows,
+    });
   } catch (error) {
-    console.log(`there is an error: ${error}`)
+    console.log(`there is an error: ${error}`);
     res.status(404).json({
-      message: `Selected todo cannot be deleted, please try again`
+      message: `Selected todo cannot be deleted, please try again`,
     });
   }
 });
-
 
 //DELETE a todo
 // app.delete<{ id: string }>("/todoapp/:id", (req, res) => {
