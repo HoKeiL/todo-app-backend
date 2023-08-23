@@ -1,7 +1,7 @@
 export interface DbItem {
   task: string;
   dueDate: string;
-  status: "Done" | "InProgress";
+  completed: boolean;
 }
 
 export interface DbItemWithId extends DbItem {
@@ -24,17 +24,17 @@ export const todoSamples: DbItem[] = [
   {
     task: "finish todoapp",
     dueDate: "23-08-2023",
-    status: "InProgress",
+    completed: false,
   },
   {
     task: "drink 2L water",
     dueDate: "23-08-2023",
-    status: "InProgress",
+    completed: false,
   },
   {
     task: "HIIT ",
     dueDate: "25-08-2023",
-    status: "InProgress",
+    completed: false,
   },
 ];
 export const addDummyDbItems = (n: number): DbItemWithId[] => {
