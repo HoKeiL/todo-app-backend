@@ -41,7 +41,7 @@ app.get("/todoapp", async (req, res) => {
     const result = await client.query(text);
     res.status(200).json(result.rows);
   } catch (error) {
-    console.log(`there is an error: ${error}`);
+    console.error(`there is an error: ${error}`);
   }
 });
 
@@ -56,12 +56,12 @@ app.post<{}, {}, DbItem>("/todoapp", async (req, res) => {
   try {
     const postData = req.body;
     const text =
-      "INSERT INTO todoapp(task, duedate, completed) VALUES($1, $2, $3)";
+      "INSERT INTO todoapp(task, dueDate, completed) VALUES($1, $2, $3)";
     const value = [postData.task, postData.dueDate, postData.completed];
     const result = await client.query(text, value);
     res.status(201).json(result.rows);
   } catch (error) {
-    console.log(`there is an error: ${error}`);
+    console.error(`there is an error: ${error}`);
   }
 });
 
@@ -88,7 +88,7 @@ app.patch<{ id: string }, {}, Partial<DbItem>>(
         updated: result.rows,
       });
     } catch (error) {
-      console.log(`there is an error: ${error}`);
+      console.error(`there is an error: ${error}`);
       res
         .status(404)
         .json("todo status cannot be updated, please try again later.");
@@ -111,7 +111,7 @@ app.patch<{ id: string }, {}, Partial<DbItem>>(
 app.delete<{ id: string }>("/todoapp/:id", async (req, res) => {
   try {
     const matchingId = parseInt(req.params.id);
-    const queryText = "DELETE FROM todos WHERE id = $1";
+    const queryText = "DELETE FROM todoapp WHERE id = $1";
     const values = [matchingId];
     const result = await client.query(queryText, values);
     res.status(200).json({
@@ -119,7 +119,7 @@ app.delete<{ id: string }>("/todoapp/:id", async (req, res) => {
       row: result.rows,
     });
   } catch (error) {
-    console.log(`there is an error: ${error}`);
+    console.error(`there is an error: ${error}`);
     res.status(404).json({
       message: `Selected todo cannot be deleted, please try again`,
     });
