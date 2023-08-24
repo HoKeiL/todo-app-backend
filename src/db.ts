@@ -1,6 +1,6 @@
 export interface DbItem {
   task: string;
-  dueDate: string;
+  duedate: string;
   completed: boolean;
 }
 
@@ -23,17 +23,17 @@ let idCounter = 0;
 export const todoSamples: DbItem[] = [
   {
     task: "finish todoapp",
-    dueDate: "23-08-2023",
+    duedate: "23-08-2023",
     completed: false,
   },
   {
     task: "drink 2L water",
-    dueDate: "23-08-2023",
+    duedate: "23-08-2023",
     completed: false,
   },
   {
     task: "HIIT ",
-    dueDate: "25-08-2023",
+    duedate: "25-08-2023",
     completed: false,
   },
 ];

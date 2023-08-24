@@ -3,24 +3,24 @@ DROP TABLE IF EXISTS todoapp RESTRICT;
 CREATE TABLE todoapp (
 id SERIAL PRIMARY KEY,
   task VARCHAR(100) ,
-  duedate text,
+  duedate date,
   completed boolean
 );
 
 INSERT INTO todoapp(task, duedate, completed) VALUES (
-'badminton', '22/08/2023', 'False'
+'badminton', '2023-08-23', 'False'
 );
 
 INSERT INTO todoapp(task, duedate, completed) VALUES (
-'HIIT', '23-08-2023', 'False'
+'HIIT', '2023-08-23', 'False'
 );
 
 INSERT INTO todoapp(task, duedate, completed) VALUES (
-'drink 2L wate', '23-08-2023', 'False'
+'drink 2L water', '2023-08-23', 'False'
 );
 
 INSERT INTO todoapp(task, duedate, completed) VALUES (
-'walk 10k steps', '23-08-2023', 'False'
+'walk 10k steps', '2023-08-23', 'False'
 );
 
 SELECT * FROM todoapp;

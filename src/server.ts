@@ -40,10 +40,11 @@ app.post<{}, {}, DbItem>("/todoapp", async (req, res) => {
   try {
     const postData = req.body;
     const text =
-      "INSERT INTO todoapp(task, dueDate, completed) VALUES($1, $2, $3)";
-    const value = [postData.task, postData.dueDate, postData.completed];
+      "INSERT INTO todoapp(task, duedate, completed) VALUES($1, $2, $3)";
+    const value = [postData.task, postData.duedate, postData.completed];
     const result = await client.query(text, value);
     res.status(201).json(result.rows);
+    console.log(`${result.rows} has been added`);
   } catch (error) {
     console.error(`there is an error: ${error}`);
   }
