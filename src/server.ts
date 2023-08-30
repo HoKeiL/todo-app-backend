@@ -74,7 +74,7 @@ app.patch<{ id: string }, {}, Partial<DbItem>>(
         .status(404)
         .json("todo status cannot be updated, please try again later.");
     }
-  },
+  }
 );
 
 // DELETE a todo using SQL query
@@ -117,14 +117,18 @@ function formatQNum(q: number): string {
 
   return qNum;
 }
+function increment(n: number): number {
+  n++;
+  return n;
+}
+let currentQNum = 0;
 
 async function queryAndLog(
   client: QueryResult<any>,
   sql: string,
-  params?: (number | string | boolean | undefined)[],
+  params?: (number | string | boolean | undefined)[]
 ): Promise<void> {
-  const q = 0; //need q or qNum to increment by 1 each time the function is called.
-  const qNum = formatQNum(q);
+  const qNum = formatQNum(currentQNum);
 
   console.log(`SQL START  qNum: ${qNum} SQL: ${sql} params: ${params}`);
   const startTime = performance.now();
@@ -132,6 +136,7 @@ async function queryAndLog(
   const elapsedTime = stopTime - startTime;
   const rowCount = client.rowCount;
   console.log(
-    `SQL END   qNum: ${qNum} time:  ${elapsedTime}ms rowCount:  ${rowCount} sql:  ${sql}  params: ${params}`,
+    `SQL END   qNum: ${qNum} time:  ${elapsedTime}ms rowCount:  ${rowCount} sql:  ${sql}  params: ${params}`
   );
+  currentQNum = increment(currentQNum);
 }
