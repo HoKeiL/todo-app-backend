@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { DbItem } from "./db";
 import filePath from "./filePath";
-import { Client } from "pg";
+import { Client, QueryResult } from "pg";
 import { getEnvVarOrFail } from "./getEnvVarOrFail";
 
 const app = express();
@@ -29,6 +29,7 @@ app.get("/todoapp", async (req, res) => {
   try {
     const text = "SELECT * FROM todoapp";
     const result = await client.query(text);
+    queryAndLog(result, text);
     res.status(200).json(result.rows);
   } catch (error) {
     console.error(`there is an error: ${error}`);
@@ -43,6 +44,7 @@ app.post<{}, {}, DbItem>("/todoapp", async (req, res) => {
       "INSERT INTO todoapp(task, duedate, completed) VALUES($1, $2, $3)";
     const value = [postData.task, postData.duedate, postData.completed];
     const result = await client.query(text, value);
+    queryAndLog(result, text, value);
     res.status(201).json(result.rows);
     console.log(`${result.rows} has been added`);
   } catch (error) {
@@ -61,6 +63,7 @@ app.patch<{ id: string }, {}, Partial<DbItem>>(
       const queryText = "UPDATE todoapp SET completed = $2 WHERE id = $1";
       const values = [matchingId, patchData.completed];
       const result = await client.query(queryText, values);
+      queryAndLog(result, queryText, values);
       res.status(200).json({
         message: "todo status has been updated",
         updated: result.rows,
@@ -82,6 +85,7 @@ app.delete<{ id: string }>("/todoapp/:id", async (req, res) => {
     const queryText = "DELETE FROM todoapp WHERE id = $1";
     const values = [matchingId];
     const result = await client.query(queryText, values);
+    queryAndLog(result, queryText, values);
     res.status(200).json({
       message: `todo ${matchingId} has been deleted`,
       row: result.rows,
@@ -97,3 +101,37 @@ app.delete<{ id: string }>("/todoapp/:id", async (req, res) => {
 app.listen(PORT_NUMBER, () => {
   console.log(`Server is listening on port ${PORT_NUMBER}!`);
 });
+
+//need to left padded and increment by each querylog
+function formatQNum(q: number): string {
+  let qNum: string;
+  if (q < 10) {
+    qNum = `000${q}`;
+  } else if (q >= 10 && q <= 99) {
+    qNum = `00${q}`;
+  } else if (q >= 100 && q <= 999) {
+    qNum = `0${q}`;
+  } else {
+    qNum = `${q}`;
+  }
+
+  return qNum;
+}
+
+async function queryAndLog(
+  client: QueryResult<any>,
+  sql: string,
+  params?: (number | string | boolean | undefined)[],
+): Promise<void> {
+  const q = 0; //need q or qNum to increment by 1 each time the function is called.
+  const qNum = formatQNum(q);
+
+  console.log(`SQL START  qNum: ${qNum} SQL: ${sql} params: ${params}`);
+  const startTime = performance.now();
+  const stopTime = performance.now();
+  const elapsedTime = stopTime - startTime;
+  const rowCount = client.rowCount;
+  console.log(
+    `SQL END   qNum: ${qNum} time:  ${elapsedTime}ms rowCount:  ${rowCount} sql:  ${sql}  params: ${params}`,
+  );
+}
